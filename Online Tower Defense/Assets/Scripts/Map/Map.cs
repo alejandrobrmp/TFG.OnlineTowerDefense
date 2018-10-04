@@ -27,8 +27,9 @@ public class Map : MonoBehaviour {
     /// <param name="mapSize">Size of the map</param>
     /// <param name="startupPoint">Startup point, positive from here, leave undefined for 0,0</param>
     /// <param name="groundData">Ground data, leave null to use the default values from the prefab</param>
-    public void MakeGrid(Vector2 mapSize, Vector3 startupPoint = default(Vector3), ScriptableGround groundData = null)
+    public List<GameObject> MakeGrid(Vector2 mapSize, Vector3 startupPoint = default(Vector3), ScriptableGround groundData = null)
     {
+        List<GameObject> hexInstances = new List<GameObject>();
         for (int x = 0; x < mapSize.x; x++)
         {
             for (int y = 0; y < mapSize.y; y++)
@@ -43,6 +44,7 @@ public class Map : MonoBehaviour {
                 hexInstances.Add(hexInstance);
             }
         }
+        return hexInstances;
 
     }
 
