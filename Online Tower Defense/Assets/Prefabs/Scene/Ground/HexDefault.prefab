@@ -40,9 +40,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4602357988164764}
+  - component: {fileID: 114203331611483466}
   m_Layer: 0
-  m_Name: Hex
-  m_TagString: Untagged
+  m_Name: HexDefault
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -134,6 +135,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114203331611483466
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1660047120351284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb5de595bdb88ac439fe69e9906c13e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScriptableGround: {fileID: 0}
 --- !u!114 &114283499394695864
 MonoBehaviour:
   m_ObjectHideFlags: 1
