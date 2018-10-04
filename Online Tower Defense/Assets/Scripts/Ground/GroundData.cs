@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class GroundData : MonoBehaviour {
 
+    private Vector3 position;
+
     public ScriptableGround ScriptableGround;
 
     private void Start()
     {
+        position = transform.position;
+        name = position.ToString();
+
         if (ScriptableGround == null)
         {
             Debug.Log("No material provided, using default.");
