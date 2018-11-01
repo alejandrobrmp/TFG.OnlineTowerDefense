@@ -179,6 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f74f053d4a53bc14a9acc7035ec281cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapEditor: {fileID: 0}
   GroundObject: {fileID: 11400000, guid: d07235b17c1604047b04ed3d35bdbcf4, type: 2}
   TextObject: {fileID: 114883969655662716}
   ImageObject: {fileID: 114820918538645302}
@@ -324,7 +325,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 447, y: -75}
+  m_AnchoredPosition: {x: 738, y: -75}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224388713371077358

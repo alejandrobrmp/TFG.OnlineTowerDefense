@@ -35,6 +35,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4397133290884444}
+  - component: {fileID: 114542919554375042}
+  - component: {fileID: 65011483336397086}
   m_Layer: 0
   m_Name: Hexagon2D
   m_TagString: Untagged
@@ -49,7 +51,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1750351717698994}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -6.995035, y: -1.0528502, z: -6.782979}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4408956065264132}
@@ -69,6 +71,29 @@ Transform:
   m_Father: {fileID: 4397133290884444}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!65 &65011483336397086
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1750351717698994}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.81627226, y: 0.029081583, z: 0.6176338}
+  m_Center: {x: -0.0068576336, y: 0.012399316, z: 0.0007638931}
+--- !u!114 &114542919554375042
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1750351717698994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6976c83603a2bd24698bb0e30b698abe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212236907938799564
 SpriteRenderer:
   m_ObjectHideFlags: 1

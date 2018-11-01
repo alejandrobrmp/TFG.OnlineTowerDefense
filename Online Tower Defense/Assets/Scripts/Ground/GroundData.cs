@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class GroundData : MonoBehaviour {
 
-    private Vector3 position;
-
+    public bool FadeIn = true;
     public ScriptableGround ScriptableGround;
+
+    private Vector3 position;
 
     private void Start()
     {
@@ -22,6 +23,7 @@ public class GroundData : MonoBehaviour {
             Debug.Log(ScriptableGround.name);
             GetComponentInChildren<Renderer>().material = ScriptableGround.Materials.Materials[0];
             GetComponentInChildren<MaterialSwapper>().materials = ScriptableGround.Materials.Materials.GetRange(1, ScriptableGround.Materials.Materials.Count - 1);
+            GetComponentInChildren<GroundVisualsController>().FadeIn = FadeIn;
         }
     }
 

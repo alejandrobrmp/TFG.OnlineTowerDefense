@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(MaterialSwapper))]
 public class GroundVisualsController : MonoBehaviour {
 
+    public bool FadeIn = true;
+    
     private DissolveController dissolveController;
     private MaterialSwapper materialSwapper;
 
@@ -13,7 +15,10 @@ public class GroundVisualsController : MonoBehaviour {
     {
         dissolveController = GetComponent<DissolveController>();
         materialSwapper = GetComponent<MaterialSwapper>();
-        StartCoroutine(dissolveController.FadeIn());
+        if (FadeIn)
+        {
+            StartCoroutine(dissolveController.FadeIn());
+        }
     }
     private void OnRenderObject()
     {
