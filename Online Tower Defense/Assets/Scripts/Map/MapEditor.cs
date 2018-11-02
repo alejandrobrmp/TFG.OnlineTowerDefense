@@ -14,6 +14,7 @@ public class MapEditor : MonoBehaviour {
     public GameObject PlacedObjects;
     public GameObject CreateGridPanel;
 
+    private Vector2 currentMapSize;
     private ScriptableGround Material;
     private GameObject SelectedObjectInstance;
     private List<GameObject> hexInstances = new List<GameObject>();
@@ -31,18 +32,22 @@ public class MapEditor : MonoBehaviour {
         float scroll = Input.mouseScrollDelta.y;
         if (scroll != 0)
         {
-            float absScroll = Mathf.Abs(scroll);
-            float yValue = scroll > 0 ? (.1f * absScroll) : (-.1f * absScroll);
-            Vector3 newPosition = Grid2D.transform.position + new Vector3(0f, yValue, 0f);
-            newPosition.y = Mathf.Clamp(newPosition.y, 0f, 5f);
-            Grid2D.transform.position = newPosition;
-            UpdateGrid();
-            Destroy(SelectedObjectInstance);
-            SelectedObjectInstance = null;
-            Vector3 cameraPos = Camera.main.transform.position;
-            cameraPos.y += yValue;
-            cameraPos.y = Mathf.Clamp(cameraPos.y, initialCameraY, initialCameraY + 5f);
-            Camera.main.transform.position = cameraPos;
+            if (scroll > 0 && Grid2D.transform.position.y < 5f ||
+                scroll < 0 && Grid2D.transform.position.y > 0f)
+            {
+                float absScroll = Mathf.Abs(scroll);
+                float yValue = scroll > 0 ? (.1f * absScroll) : (-.1f * absScroll);
+                Vector3 newPosition = Grid2D.transform.position + new Vector3(0f, yValue, 0f);
+                newPosition.y = Mathf.Clamp(newPosition.y, 0f, 5f);
+                Grid2D.transform.position = newPosition;
+                UpdateGrid();
+                Destroy(SelectedObjectInstance);
+                SelectedObjectInstance = null;
+                Vector3 cameraPos = Camera.main.transform.position;
+                cameraPos.y += yValue;
+                cameraPos.y = Mathf.Clamp(cameraPos.y, initialCameraY, initialCameraY + 5f);
+                Camera.main.transform.position = cameraPos;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.G))
@@ -65,6 +70,7 @@ public class MapEditor : MonoBehaviour {
 
     public void MakeGrid(Vector2 mapSize)
     {
+        currentMapSize = mapSize;
         float startX = 0f;
         float endX = 0f;
         if (hexInstances.Count > 0)
@@ -79,7 +85,7 @@ public class MapEditor : MonoBehaviour {
         {
             for (int y = 0; y < mapSize.y; y++)
             {
-                Vector3 position = new Vector3(x, 0, y * Offset.y);
+                Vector3 position = new Vector3(x, Grid2D.transform.position.y, y * Offset.y);
                 if (y % 2 == 0)
                 {
                     position.x += Offset.x;
@@ -90,7 +96,7 @@ public class MapEditor : MonoBehaviour {
                 {
                     startX = position.x;
                 }
-                else if (position.z > startX)
+                else if (position.x > startX)
                 {
                     endX = position.x;
                 }
@@ -188,13 +194,31 @@ public class MapEditor : MonoBehaviour {
 
     public void OnMouseClick(GameObject hexTile)
     {
-        Debug.Log("Place");
-        if (SelectedObjectInstance != null)
+        if (SelectedObjectInstance != null && !isFading)
         {
             SelectedObjectInstance.transform.parent = PlacedObjects.transform;
             SelectedObjectInstance = null;
             hexTile.SetActive(false);
         }
+    }
+
+    public void Reset()
+    {
+        for (int i = 0; i < PlacedObjects.transform.childCount; i++)
+        {
+            Destroy(PlacedObjects.transform.GetChild(i).gameObject);
+        }
+        MakeGrid(currentMapSize);
+    }
+
+    public List<GroundDataSerializable> GetGroundDataInstances()
+    {
+        List<GroundDataSerializable> data = new List<GroundDataSerializable>();
+        for (int i = 0; i < PlacedObjects.transform.childCount; i++)
+        {
+            data.Add(PlacedObjects.transform.GetChild(i).gameObject.GetComponent<GroundData>().GetSerializable());
+        }
+        return data;
     }
 
 }
