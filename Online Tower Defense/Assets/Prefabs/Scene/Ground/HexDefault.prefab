@@ -22,9 +22,9 @@ GameObject:
   - component: {fileID: 33461054259773436}
   - component: {fileID: 23227627198080476}
   - component: {fileID: 95014083982667636}
-  - component: {fileID: 114029499615249850}
   - component: {fileID: 114466809982955670}
   - component: {fileID: 114392068006059620}
+  - component: {fileID: 114610421055418574}
   m_Layer: 0
   m_Name: Hexagon
   m_TagString: Untagged
@@ -135,17 +135,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114029499615249850
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1292153325016128}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66feab65bad096349aa3c095fc481f05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114054035720997362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -157,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb5de595bdb88ac439fe69e9906c13e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FadeIn: 1
   ScriptableGround: {fileID: 0}
 --- !u!114 &114392068006059620
 MonoBehaviour:
@@ -169,6 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd689f0e8e97134478afb03084be622c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FadeIn: 1
 --- !u!114 &114466809982955670
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -183,3 +174,14 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: d8d81848fe237394baeb62ad983d8498, type: 2}
   - {fileID: 2100000, guid: a74b55e55a5425a4d8e7a8c33b312631, type: 2}
+--- !u!114 &114610421055418574
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1292153325016128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e75deaae8e1bfb14d8c96add84f8c520, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
