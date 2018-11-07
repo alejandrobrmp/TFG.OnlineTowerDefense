@@ -8,4 +8,8 @@ public class ScriptableGround : ScriptableObject {
 
     public ScriptableMaterialList Materials;
 
+    public bool IsSpawn;
+
+    public bool IsFinish;
+
 }

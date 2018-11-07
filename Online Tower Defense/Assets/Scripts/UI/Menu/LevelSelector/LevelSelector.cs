@@ -16,7 +16,7 @@ public class LevelSelector : MonoBehaviour {
 
     private string[] files;
 
-    private void Start()
+    private void Awake()
     {
         if (LS == null)
         {
@@ -30,7 +30,10 @@ public class LevelSelector : MonoBehaviour {
                 Destroy(gameObject);
             }
         }
+    }
 
+    private void Start()
+    {
         string path = Path.Combine(Application.persistentDataPath, "Maps");
         if (Directory.Exists(path))
         {

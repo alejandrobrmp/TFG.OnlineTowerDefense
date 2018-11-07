@@ -127,6 +127,7 @@ public class MapEditor : MonoBehaviour {
         Vector3 position = SelectedObjectInstance.transform.position;
         Destroy(SelectedObjectInstance);
         SelectedObjectInstance = Instantiate(Hex3DPrefab, position, Quaternion.identity, transform);
+        SelectedObjectInstance.GetComponentInChildren<MeshCollider>().enabled = false;
         GroundData groundData = SelectedObjectInstance.GetComponent<GroundData>();
         groundData.ScriptableGround = Material;
         groundData.FadeIn = true;
@@ -159,6 +160,7 @@ public class MapEditor : MonoBehaviour {
         else
         {
             SelectedObjectInstance = Instantiate(Hex3DPrefab, position, Quaternion.identity, transform);
+            SelectedObjectInstance.GetComponentInChildren<MeshCollider>().enabled = false;
             GroundData groundData = SelectedObjectInstance.GetComponent<GroundData>();
             groundData.ScriptableGround = Material;
             groundData.FadeIn = PlacedObjects.transform.childCount == 0;

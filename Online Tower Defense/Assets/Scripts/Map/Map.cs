@@ -1,17 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Map : MonoBehaviour {
-
+    
     public GameObject prefab;
     private List<GameObject> hexInstances = new List<GameObject>();
 
     private void Start()
     {
-        foreach (GroundDataSerializable item in LevelSelector.LS.SelectedLevel)
+        List<GroundDataSerializable> items = LevelSelector.LS.SelectedLevel;
+        foreach (GroundDataSerializable item in items)
         {
             ScriptableGround scriptableGround = GetScriptableGround(item.ScriptableGround);
             if (scriptableGround != null)
@@ -20,6 +23,28 @@ public class Map : MonoBehaviour {
                 GroundData data = instance.GetComponent<GroundData>();
                 data.FadeIn = true;
                 data.ScriptableGround = scriptableGround;
+
+                MeshFilter mf = instance.GetComponentInChildren<MeshFilter>();
+                if (scriptableGround.IsSpawn || scriptableGround.IsFinish || item.ScriptableGround.Equals("Grass"))
+                {
+                    instance.transform.GetChild(0).gameObject.AddComponent<NavMeshSourceTag>();
+
+                    if (scriptableGround.IsSpawn)
+                    {
+                        GameController.Instance.Spawner = instance.GetComponent<Spawner>();
+                        GameController.Instance.Spawner.enabled = true;
+                    }
+                    else if (scriptableGround.IsFinish)
+                    {
+                        GameController.Instance.End = instance;
+                        GameController.Instance.WalkableTiles.Add(instance);
+                    }
+                    else
+                    {
+                        GameController.Instance.WalkableTiles.Add(instance);
+                    }
+                }
+
                 hexInstances.Add(instance);
             }
             else
@@ -40,6 +65,10 @@ public class Map : MonoBehaviour {
                 return (ScriptableGround)AssetDatabase.LoadAssetAtPath(commonPath + "/Grass/Grass.asset", typeof(ScriptableGround));
             case "Stone":
                 return (ScriptableGround)AssetDatabase.LoadAssetAtPath(commonPath + "/Stone/Stone.asset", typeof(ScriptableGround));
+            case "Spawn":
+                return (ScriptableGround)AssetDatabase.LoadAssetAtPath(commonPath + "/Spawn/Spawn.asset", typeof(ScriptableGround));
+            case "End":
+                return (ScriptableGround)AssetDatabase.LoadAssetAtPath(commonPath + "/End/End.asset", typeof(ScriptableGround));
         }
         return null;
     }
