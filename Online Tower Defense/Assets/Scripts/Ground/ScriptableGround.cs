@@ -12,4 +12,6 @@ public class ScriptableGround : ScriptableObject {
 
     public bool IsFinish;
 
+    public bool IsPlaceable;
+
 }

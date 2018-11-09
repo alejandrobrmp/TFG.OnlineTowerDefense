@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Name: Stone
   m_EditorClassIdentifier: 
   Materials: {fileID: 11400000, guid: bdfb1b93739565f449eadb6fd9fb5219, type: 2}
+  IsSpawn: 0
+  IsFinish: 0
+  IsPlaceable: 1

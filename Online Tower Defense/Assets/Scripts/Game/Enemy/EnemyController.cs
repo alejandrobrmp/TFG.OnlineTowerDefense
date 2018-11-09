@@ -45,6 +45,11 @@ public class EnemyController : MonoBehaviour {
             StartCoroutine(MoveNext());
             finished = currentStep.NextStep == null;
         }
+        else if (currentStep == null)
+        {
+            GameController.Instance.RemoveEnemy(gameObject);
+            Destroy(gameObject);
+        }
     }
 
     private IEnumerator MoveNext()

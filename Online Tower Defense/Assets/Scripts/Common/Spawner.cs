@@ -7,17 +7,23 @@ public class Spawner : MonoBehaviour {
 
     public GameObject Prefab;
 
-    private void Start()
+    public void SpawnWave(Wave wave)
     {
-        StartCoroutine(L());
+        StartCoroutine(Wave(wave.Count, wave.Timeout));
     }
 
-    private IEnumerator L()
+    private IEnumerator Wave(int count, float timeoutSeconds)
     {
-        yield return new WaitForSeconds(1f);
-        Vector3 pos = gameObject.transform.position;
-        pos.y+=.5f;
-        GameObject instance = Instantiate(Prefab, pos, Quaternion.identity, null);
+        int i = 0;
+        while (i < count)
+        {
+            Vector3 pos = gameObject.transform.position;
+            pos.y += .5f;
+            GameObject instance = Instantiate(Prefab, pos, Quaternion.identity, null);
+            GameController.Instance.AddEnemy(instance);
+            i++;
+            yield return new WaitForSeconds(timeoutSeconds);
+        }
     }
 
 }

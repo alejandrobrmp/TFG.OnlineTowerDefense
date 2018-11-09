@@ -8,7 +8,8 @@ using UnityEngine.AI;
 
 public class Map : MonoBehaviour {
     
-    public GameObject prefab;
+    public GameObject Prefab;
+    public GameObject PlaceableIndicator;
     private List<GameObject> hexInstances = new List<GameObject>();
 
     private void Start()
@@ -19,7 +20,7 @@ public class Map : MonoBehaviour {
             ScriptableGround scriptableGround = GetScriptableGround(item.ScriptableGround);
             if (scriptableGround != null)
             {
-                GameObject instance = Instantiate(prefab, (Vector3)item.Position, Quaternion.identity, gameObject.transform);
+                GameObject instance = Instantiate(Prefab, (Vector3)item.Position, Quaternion.identity, gameObject.transform);
                 GroundData data = instance.GetComponent<GroundData>();
                 data.FadeIn = true;
                 data.ScriptableGround = scriptableGround;
@@ -43,6 +44,13 @@ public class Map : MonoBehaviour {
                     {
                         GameController.Instance.WalkableTiles.Add(instance);
                     }
+                }
+                if (scriptableGround.IsPlaceable)
+                {
+                    Vector3 pos = instance.transform.position;
+                    pos.y += .06f;
+                    Instantiate(PlaceableIndicator, pos, Quaternion.identity, instance.transform);
+                    GameController.Instance.PlaceableTiles.Add(instance);
                 }
 
                 hexInstances.Add(instance);
