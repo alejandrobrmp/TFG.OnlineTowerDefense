@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(HealthController))]
 public class EnemyController : MonoBehaviour {
 
-    public float TimeMovement = 1f / 1f;
+    public float TimeMovement = 1f / 10f;
 
     private PathStep currentStep;
     private bool isMoving = true;
@@ -15,6 +16,17 @@ public class EnemyController : MonoBehaviour {
     private void Start()
     {
         StartCoroutine(CalculatePath(StartMovement));
+        GetComponentInChildren<HealthController>().OnHealthChanged += EnemyController_OnHealthChanged;
+    }
+
+    private void EnemyController_OnHealthChanged(float health)
+    {
+        if (health == 0f)
+        {
+            finished = true;
+            GameController.Instance.RemoveEnemy(gameObject);
+            Destroy(gameObject);
+        }
     }
 
     private IEnumerator CalculatePath(Action<PathStep> callback)

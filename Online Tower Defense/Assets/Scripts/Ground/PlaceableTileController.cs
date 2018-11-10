@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class PlaceableTileController : MonoBehaviour {
 
+    public ScriptableTurret TurretData;
     public GameObject TEMPORAL;
     private GameObject assignedGameobject;
 
-    public void InstantiateGameObject(GameObject gameObject)
+    public void InstantiateGameObject(GameObject gameObject, ScriptableTurret turretData)
     {
         assignedGameobject = Instantiate(gameObject, transform.position, Quaternion.identity, null);
+        assignedGameobject.GetComponent<TurretController>().ApplyScriptableTurret(turretData);
         ToogleEnable();
     }
 
@@ -25,7 +27,7 @@ public class PlaceableTileController : MonoBehaviour {
 
     private void OnMouseDown()
     {
-        InstantiateGameObject(TEMPORAL);
+        InstantiateGameObject(TEMPORAL, TurretData);
     }
 
 }

@@ -20,7 +20,8 @@ public class GameController : MonoBehaviour {
         new Wave() { Count = 15, Timeout = .7f },
         new Wave() { Count = 20, Timeout = .3f },
     };
-    public int CurrentWave = 1;
+    public int CurrentWave = 0;
+    public bool IsPlaying = false;
 
     public Spawner Spawner;
     public List<GameObject> EnemiesInScene = new List<GameObject>();
@@ -51,6 +52,7 @@ public class GameController : MonoBehaviour {
         {
             if (count == 0)
             {
+                IsPlaying = false;
                 TogglePlaceableTiles();
             }
         });
@@ -60,6 +62,7 @@ public class GameController : MonoBehaviour {
     {
         if (CurrentWave <= Waves.Length)
         {
+            IsPlaying = true;
             TogglePlaceableTiles();
             CurrentWave++;
             Spawner.SpawnWave(Waves[CurrentWave - 1]);

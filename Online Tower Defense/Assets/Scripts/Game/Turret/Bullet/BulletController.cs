@@ -8,6 +8,8 @@ public class BulletController : MonoBehaviour {
     public float Speed = 50f;
     public bool IsFiring = false;
 
+    public AttackBase Attack;
+
     private void Update()
     {
         if (IsFiring)
@@ -23,7 +25,11 @@ public class BulletController : MonoBehaviour {
 
             if (direction.magnitude <= distance)
             {
-                Debug.Log("HIT");
+                if (Attack != null)
+                {
+                    EnemyController ec = Target.GetComponent<EnemyController>();
+                    Attack.ApplyAttack(ec);
+                }
                 Destroy(gameObject);
             }
             else

@@ -100,9 +100,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4260118679172216}
-  - component: {fileID: 65141817129920872}
   - component: {fileID: 114727003616046944}
   - component: {fileID: 54990413294238692}
+  - component: {fileID: 135132499976047510}
   m_Layer: 0
   m_Name: Turret
   m_TagString: Untagged
@@ -193,7 +193,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1656767253328046}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.9217117, y: -1.8132782, z: 4.889007}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4461108099382524}
@@ -354,18 +354,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65141817129920872
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1656767253328046}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 3, y: 2, z: 3}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114727003616046944
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -382,6 +370,18 @@ MonoBehaviour:
     type: 2}
   BulletInstantiationPoint: {fileID: 4552608944199440}
   BulletPreparedPointOffset: {x: 0, y: 0.2, z: 0}
+--- !u!135 &135132499976047510
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1656767253328046}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!198 &198084830446194424
 ParticleSystem:
   m_ObjectHideFlags: 1

@@ -9,16 +9,19 @@ public class TurretController : MonoBehaviour {
     public Transform BulletInstantiationPoint;
     public Vector3 BulletPreparedPointOffset;
 
+    private List<GameObject> AvailableTargets = new List<GameObject>();
     private GameObject target;
     private bool isCoolingDown = false;
     private GameObject bulletInstance;
-    private float range = 1.5f;
+    private float range = 2f;
+    private int level = 1;
+    private ScriptableTurret Data;
 
     private void Start()
     {
         GameController.Instance.EnemiesListListener.Add((int count) =>
         {
-            GetComponent<BoxCollider>().enabled = count > 0;
+            GetComponent<SphereCollider>().enabled = count > 0;
         });
         isCoolingDown = true;
         StartCoroutine(PrepareBullet());
@@ -26,12 +29,28 @@ public class TurretController : MonoBehaviour {
 
     private void Update()
     {
-        CheckExit();
+        if (!GameController.Instance.IsPlaying)
+            return;
+        
         if (!isCoolingDown && target != null)
         {
             Shoot(target);
             isCoolingDown = true;
             StartCoroutine(PrepareBullet());
+        }
+    }
+
+    public void ApplyScriptableTurret(ScriptableTurret data)
+    {
+        Data = data;
+        switch (data.Level)
+        {
+            case 1:
+                break;
+            case 2:
+                break;
+            default:
+                break;
         }
     }
 
@@ -54,6 +73,7 @@ public class TurretController : MonoBehaviour {
     private void Shoot(GameObject target)
     {
         BulletController bullet = bulletInstance.GetComponent<BulletController>();
+        bullet.Attack = Data.Attack.Attack;
         bullet.Target = target;
         bullet.IsFiring = true;
         bulletInstance = null;
@@ -61,23 +81,51 @@ public class TurretController : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Enter");
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy") && !AvailableTargets.Contains(other.gameObject))
         {
-            target = other.gameObject;
-            GetComponent<BoxCollider>().enabled = false;
+            AvailableTargets.Add(other.gameObject);
+            SelectTarget();
         }
     }
 
-    private void CheckExit()
+    private void OnTriggerExit(Collider other)
     {
-        if (target != null &&
-            Vector3.Distance(transform.position, target.transform.position) > range)
+        if (other.CompareTag("Enemy") && AvailableTargets.Contains(other.gameObject))
         {
-            target = null;
-            GetComponent<BoxCollider>().enabled = true;
+            AvailableTargets.Remove(other.gameObject);
+            SelectTarget();
         }
     }
+
+    private void SelectTarget()
+    {
+        GameObject target = null;
+        foreach (var t in AvailableTargets)
+        {
+            if (target == null ||
+                (
+                target != null &&
+                target.GetComponentInChildren<HealthController>().CurrentHealth >
+                t.GetComponentInChildren<HealthController>().CurrentHealth
+                ))
+            {
+                target = t;
+            }
+        }
+        this.target = target;
+    }
+
+    //private void CheckExit()
+    //{
+    //    if (target == null || (target != null &&
+    //        Vector3.Distance(transform.position, target.transform.position) > range))
+    //    {
+    //        Debug.Log("Target reset");
+    //        Debug.Log((target == null) + " : " + Vector3.Distance(transform.position, target.transform.position));
+    //        target = null;
+    //        //GetComponent<SphereCollider>().enabled = true;
+    //    }
+    //}
 
 
 

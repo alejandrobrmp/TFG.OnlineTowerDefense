@@ -94,6 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a46cbf423d48a146b64cbbf6a04b469, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TurretData: {fileID: 11400000, guid: 62994f880490a3c42b512e9b178afb6d, type: 2}
   TEMPORAL: {fileID: 1656767253328046, guid: 83c80c233b6d20a43a282b264b0e4604, type: 2}
 --- !u!212 &212236907938799564
 SpriteRenderer:
