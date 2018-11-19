@@ -1,30 +1,69 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TurretController : MonoBehaviour {
 
+    public PlaceableTileController Tile;
+    public ScriptableTurret TurretData;
     public float CooldownSeconds = 3f;
     public GameObject BulletPrefab;
     public Transform BulletInstantiationPoint;
     public Vector3 BulletPreparedPointOffset;
+    public GameObject BasicEffect;
+    public GameObject UpgradedEffect;
+    public LevelIndicatorController LevelIndicator;
+
+    public GameObject ActionsPanel;
+    public Button UpgradeButton;
+    public Button SellButton;
 
     private List<GameObject> AvailableTargets = new List<GameObject>();
     private GameObject target;
     private bool isCoolingDown = false;
     private GameObject bulletInstance;
     private float range = 2f;
-    private int level = 1;
-    private ScriptableTurret Data;
+    private ScriptableAttack CurrentLevel;
 
     private void Start()
     {
-        GameController.Instance.EnemiesListListener.Add((int count) =>
+        GameController.Instance.OnPlayChange += OnPlayChange;
+        GameController.Instance.OnActionsLeftChanged += OnActionsLeftChanged;
+        Debug.Log(GameController.Instance.ActionsLeft);
+
+        SellButton.onClick.AddListener(() =>
         {
-            GetComponent<SphereCollider>().enabled = count > 0;
+            GameController.Instance.ModifyActionsLeft(CurrentLevel.Attack.Level);
+            Tile.TurretDestroyed();
+            GameController.Instance.OnPlayChange -= OnPlayChange;
+            GameController.Instance.OnActionsLeftChanged -= OnActionsLeftChanged;
+            Destroy(gameObject);
         });
+
+        UpgradeButton.onClick.AddListener(() =>
+        {
+            GameController.Instance.ModifyActionsLeft(-1);
+            ApplyScriptableTurret(TurretData.Levels[TurretData.Levels.IndexOf(CurrentLevel) + 1]);
+        });
+
+        EvaulateUpgradable();
+        ApplyScriptableTurret(TurretData.Levels[0]);
         isCoolingDown = true;
         StartCoroutine(PrepareBullet());
+    }
+
+    private void OnPlayChange(bool value, bool hasMoreWaves)
+    {
+        GetComponent<SphereCollider>().enabled = value;
+        GetComponent<BoxCollider>().enabled = !value;
+        LevelIndicator.gameObject.SetActive(!value);
+    }
+
+    private void OnActionsLeftChanged(int value)
+    {
+        EvaulateUpgradable();
     }
 
     private void Update()
@@ -38,16 +77,40 @@ public class TurretController : MonoBehaviour {
             isCoolingDown = true;
             StartCoroutine(PrepareBullet());
         }
+        else if (target == null)
+        {
+            SelectTarget();
+        }
     }
 
-    public void ApplyScriptableTurret(ScriptableTurret data)
+    public void Upgrade()
     {
-        Data = data;
-        switch (data.Level)
+        if (TurretData.Levels.Count >= CurrentLevel.Attack.Level)
+        {
+            ApplyScriptableTurret(TurretData.Levels[CurrentLevel.Attack.Level]);
+        }
+    }
+    
+    public void EvaulateUpgradable()
+    {
+        UpgradeButton.interactable = TurretData.Levels.IndexOf(CurrentLevel) < TurretData.Levels.Count - 1 && GameController.Instance.ActionsLeft > 0;
+    }
+
+    public void ApplyScriptableTurret(ScriptableAttack level)
+    {
+        CurrentLevel = level;
+        LevelIndicator.SetLevel(level.Attack.Level);
+        SellButton.GetComponentInChildren<Text>().text = "Sell (" + level.Attack.Level + ")";
+        EvaulateUpgradable();
+        CooldownSeconds = level.Attack.Cooldown;
+        switch (level.Attack.Level)
         {
             case 1:
+                BasicEffect.SetActive(true);
                 break;
             case 2:
+                BasicEffect.SetActive(false);
+                UpgradedEffect.SetActive(true);
                 break;
             default:
                 break;
@@ -60,7 +123,7 @@ public class TurretController : MonoBehaviour {
         float t = 0f;
         Vector3 initialPos = BulletInstantiationPoint.position;
         Vector3 pos = initialPos + BulletPreparedPointOffset;
-        bulletInstance = Instantiate(BulletPrefab, initialPos, Quaternion.identity, null);
+        bulletInstance = Instantiate(BulletPrefab, initialPos, Quaternion.identity, transform);
         while (t < 1f)
         {
             t += Time.deltaTime * cooldown;
@@ -68,12 +131,14 @@ public class TurretController : MonoBehaviour {
             yield return null;
         }
         isCoolingDown = false;
+        yield return new WaitForSeconds(3f);
     }
 
     private void Shoot(GameObject target)
     {
         BulletController bullet = bulletInstance.GetComponent<BulletController>();
-        bullet.Attack = Data.Attack.Attack;
+        bullet.Attack = CurrentLevel.Attack;
+        bullet.Attack.instance = this;
         bullet.Target = target;
         bullet.IsFiring = true;
         bulletInstance = null;
@@ -115,18 +180,20 @@ public class TurretController : MonoBehaviour {
         this.target = target;
     }
 
-    //private void CheckExit()
-    //{
-    //    if (target == null || (target != null &&
-    //        Vector3.Distance(transform.position, target.transform.position) > range))
-    //    {
-    //        Debug.Log("Target reset");
-    //        Debug.Log((target == null) + " : " + Vector3.Distance(transform.position, target.transform.position));
-    //        target = null;
-    //        //GetComponent<SphereCollider>().enabled = true;
-    //    }
-    //}
+    private void OnMouseOver()
+    {
+        if (!GameController.Instance.IsPlaying)
+        {
+            ActionsPanel.SetActive(true);
+        }
+    }
 
-
+    private void OnMouseExit()
+    {
+        if (!GameController.Instance.IsPlaying)
+        {
+            ActionsPanel.SetActive(false);
+        }
+    }
 
 }

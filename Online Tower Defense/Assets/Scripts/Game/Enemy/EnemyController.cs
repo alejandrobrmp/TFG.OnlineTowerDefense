@@ -60,6 +60,7 @@ public class EnemyController : MonoBehaviour {
         else if (currentStep == null)
         {
             GameController.Instance.RemoveEnemy(gameObject);
+            GameController.Instance.ModifyLives(-1);
             Destroy(gameObject);
         }
     }

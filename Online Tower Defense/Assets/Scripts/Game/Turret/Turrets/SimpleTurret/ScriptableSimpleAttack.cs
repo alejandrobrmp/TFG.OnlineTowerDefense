@@ -1,32 +1,33 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
-
-public abstract class AttackBase {
-    protected float Damage;
-    public abstract void ApplyAttack(EnemyController enemy);
-}
 
 [CreateAssetMenu(fileName = "SimpleAttack", menuName = "ScriptableTurret/SimpleAttack")]
 public class ScriptableSimpleAttack : ScriptableAttack
 {
+    public int Level;
+    public float Cooldown;
     public float Damage;
     public override AttackBase Attack
     {
         get
         {
-            return new SimpleAttack(Damage);
+            return new SimpleAttack(Level, Damage, Cooldown);
         }
     }
 }
 public class SimpleAttack : AttackBase
 {
-    public SimpleAttack(float damage)
+    public SimpleAttack(int level, float damage, float cooldown)
     {
-        Damage = damage;
+        Level = level;
+        Cooldown = cooldown;
+        AttackEffect = damage;
     }
     public override void ApplyAttack(EnemyController enemy)
     {
-        enemy.GetComponentInChildren<HealthController>().ApplyHealthChanges(Damage);
+        enemy.GetComponentInChildren<HealthController>().ApplyHealthChanges(AttackEffect);
     }
 }

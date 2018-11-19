@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+public delegate void AllSpawned();
 public class Spawner : MonoBehaviour {
 
     public GameObject Prefab;
+    public event AllSpawned OnAllSpawned;
 
     public void SpawnWave(Wave wave)
     {
@@ -24,6 +26,8 @@ public class Spawner : MonoBehaviour {
             i++;
             yield return new WaitForSeconds(timeoutSeconds);
         }
+        if (OnAllSpawned != null)
+            OnAllSpawned();
     }
 
 }

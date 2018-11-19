@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Wave
 {
@@ -9,6 +11,9 @@ public class Wave
     public float Timeout { get; set; }
 }
 
+public delegate void IsPlaying(bool value, bool hasMoreWaves);
+public delegate void WaveChange(int wave, int total);
+public delegate void ActionsLeftChanged(int actions);
 public class GameController : MonoBehaviour {
 
     public static GameController Instance;
@@ -20,21 +25,28 @@ public class GameController : MonoBehaviour {
         new Wave() { Count = 15, Timeout = .7f },
         new Wave() { Count = 20, Timeout = .3f },
     };
-    public int CurrentWave = 0;
+    public int CurrentWave;
+    public event WaveChange OnWaveChange;
     public bool IsPlaying = false;
+    public event IsPlaying OnPlayChange;
+    public int ActionsLeft = 3;
+    public event ActionsLeftChanged OnActionsLeftChanged;
+    public int Lives = 12;
+    public GameObject LivesText;
 
     public Spawner Spawner;
+    public bool AllSpawned;
     public List<GameObject> EnemiesInScene = new List<GameObject>();
-    public List<Action<int>> EnemiesListListener = new List<Action<int>>();
     public GameObject End;
     public List<GameObject> WalkableTiles = new List<GameObject>();
     public List<GameObject> PlaceableTiles = new List<GameObject>();
+
+    public GameObject SelectedTurretToPlace;
 
     private void Awake()
     {
         if (Instance == null)
         {
-            DontDestroyOnLoad(gameObject);
             Instance = this;
         }
         else
@@ -46,27 +58,62 @@ public class GameController : MonoBehaviour {
         }
     }
 
+    public void Exit()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     private void Start()
     {
-        EnemiesListListener.Add((int count) =>
+        Spawner.OnAllSpawned += () => AllSpawned = true;
+        if (OnActionsLeftChanged != null)
+            OnActionsLeftChanged(ActionsLeft);
+
+        OnPlayChange += (bool value, bool hasMoreWaves) =>
         {
-            if (count == 0)
-            {
-                IsPlaying = false;
-                TogglePlaceableTiles();
-            }
-        });
+            if (!hasMoreWaves)
+                SceneManager.LoadScene(0);
+        };
+
+        ModifyLives(0);
+    }
+
+    public void ModifyLives(int value)
+    {
+        Lives += value;
+        if (Lives == 0)
+            SceneManager.LoadScene(0);
+        LivesText.GetComponent<Text>().text = "Lives: " + Lives;
+        LivesText.GetComponent<Animator>().ResetTrigger("PlayModified");
+        LivesText.GetComponent<Animator>().SetTrigger("PlayModified");
+    }
+
+    public void ModifyActionsLeft(int value)
+    {
+        ActionsLeft += value;
+        if (OnActionsLeftChanged != null)
+            OnActionsLeftChanged(ActionsLeft);
     }
 
     public void NextWave()
     {
-        if (CurrentWave <= Waves.Length)
+        if (HasMoreWaves())
         {
             IsPlaying = true;
-            TogglePlaceableTiles();
+            if (OnPlayChange != null)
+                OnPlayChange(IsPlaying, HasMoreWaves());
+
             CurrentWave++;
+            if (OnWaveChange != null)
+                OnWaveChange(CurrentWave, Waves.Length);
             Spawner.SpawnWave(Waves[CurrentWave - 1]);
+            AllSpawned = false;
         }
+    }
+
+    public bool HasMoreWaves()
+    {
+        return CurrentWave < Waves.Length;
     }
 
     public void AddEnemy(GameObject enemy)
@@ -74,7 +121,6 @@ public class GameController : MonoBehaviour {
         if (!EnemiesInScene.Contains(enemy))
         {
             EnemiesInScene.Add(enemy);
-            NotifyListeners(EnemiesInScene.Count);
         }
     }
 
@@ -83,18 +129,16 @@ public class GameController : MonoBehaviour {
         if (EnemiesInScene.Contains(enemy))
         {
             EnemiesInScene.Remove(enemy);
-            NotifyListeners(EnemiesInScene.Count);
+            if (EnemiesInScene.Count == 0 && AllSpawned)
+            {
+                IsPlaying = false;
+                if (OnPlayChange != null)
+                    OnPlayChange(IsPlaying && HasMoreWaves(), HasMoreWaves());
+                ActionsLeft += 3;
+                if (OnActionsLeftChanged != null)
+                    OnActionsLeftChanged(ActionsLeft);
+            }
         }
-    }
-
-    private void NotifyListeners(int count)
-    {
-        EnemiesListListener.ForEach(l => l(count));
-    }
-
-    private void TogglePlaceableTiles()
-    {
-        PlaceableTiles.ForEach(p => p.GetComponentInChildren<PlaceableTileController>(true).ToogleEnable());
     }
 
 }

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Turret", menuName = "ScriptableTurret")]
-public class ScriptableTurret : ScriptableObject {
+public abstract class AttackBase {
     public int Level;
-    public ScriptableAttack Attack;
+    public float Cooldown;
+    public float AttackEffect;
+    public MonoBehaviour instance;
+    public abstract void ApplyAttack(EnemyController enemy);
 }
 
 public abstract class ScriptableAttack : ScriptableObject

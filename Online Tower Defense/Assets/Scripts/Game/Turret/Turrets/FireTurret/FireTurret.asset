@@ -9,7 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d77887ab7ce2974d9d78a1d8a28d3e5, type: 3}
-  m_Name: Turret
+  m_Name: FireTurret
   m_EditorClassIdentifier: 
-  Level: 0
-  Attack: {fileID: 11400000, guid: 6c047174b562d51418d506642a939ba9, type: 2}
+  Levels:
+  - {fileID: 11400000, guid: 53bf6bfaef7fd094d89cd5e30bb13ac0, type: 2}
+  - {fileID: 11400000, guid: 2c3e2c484828da54a845c27cdd3e41cc, type: 2}
+  - {fileID: 11400000, guid: 087b1fc8da106ec42bbab76a049578eb, type: 2}
