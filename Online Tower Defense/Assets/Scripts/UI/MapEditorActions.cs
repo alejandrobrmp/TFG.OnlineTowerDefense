@@ -23,7 +23,7 @@ public class MapEditorActions : MonoBehaviour {
         {
             Directory.CreateDirectory(path);
         }
-        FileStream file = File.Open(Path.Combine(path, "MapData-" + Directory.GetFiles(path).Length), FileMode.Create);
+        FileStream file = File.Open(Path.Combine(path, "MapData-" + Directory.GetFiles(path).Length + ".map"), FileMode.Create);
         bf.Serialize(file, toSerialize);
         file.Close();
         Back();

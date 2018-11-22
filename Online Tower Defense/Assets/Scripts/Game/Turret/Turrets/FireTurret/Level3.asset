@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06464755aaf4cff4cba9079811051354, type: 3}
   m_Name: Level3
   m_EditorClassIdentifier: 
-  Level: 1
+  Level: 3
   Cooldown: 1
   DamageByTime: -20

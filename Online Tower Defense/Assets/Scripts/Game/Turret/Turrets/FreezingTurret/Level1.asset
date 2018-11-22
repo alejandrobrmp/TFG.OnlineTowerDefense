@@ -13,4 +13,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Level: 1
   Cooldown: 2.5
-  SlowingRatio: 20
+  SlowingRatio: 50

@@ -10,6 +10,8 @@ public class Map : MonoBehaviour {
     
     public GameObject Prefab;
     public GameObject PlaceableIndicator;
+    public List<ScriptableGround> Grounds;
+
     private List<GameObject> hexInstances = new List<GameObject>();
 
     private void Start()
@@ -64,21 +66,7 @@ public class Map : MonoBehaviour {
 
     public ScriptableGround GetScriptableGround(string name)
     {
-        string commonPath = "Assets/Materials/Ground";
-        switch (name)
-        {
-            case "Dirt":
-                return (ScriptableGround)AssetDatabase.LoadAssetAtPath(commonPath + "/Dirt/Dirt.asset", typeof(ScriptableGround));
-            case "Grass":
-                return (ScriptableGround)AssetDatabase.LoadAssetAtPath(commonPath + "/Grass/Grass.asset", typeof(ScriptableGround));
-            case "Stone":
-                return (ScriptableGround)AssetDatabase.LoadAssetAtPath(commonPath + "/Stone/Stone.asset", typeof(ScriptableGround));
-            case "Spawn":
-                return (ScriptableGround)AssetDatabase.LoadAssetAtPath(commonPath + "/Spawn/Spawn.asset", typeof(ScriptableGround));
-            case "End":
-                return (ScriptableGround)AssetDatabase.LoadAssetAtPath(commonPath + "/End/End.asset", typeof(ScriptableGround));
-        }
-        return null;
+        return Grounds.Find((g) => g.name.Equals(name));
     }
 
 }

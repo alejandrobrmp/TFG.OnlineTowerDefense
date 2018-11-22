@@ -21,7 +21,7 @@ public class EnemyController : MonoBehaviour {
 
     private void EnemyController_OnHealthChanged(float health)
     {
-        if (health == 0f)
+        if (health <= 0f)
         {
             finished = true;
             GameController.Instance.RemoveEnemy(gameObject);

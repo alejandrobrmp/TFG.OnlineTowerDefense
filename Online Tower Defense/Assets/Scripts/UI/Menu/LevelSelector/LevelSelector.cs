@@ -14,7 +14,7 @@ public class LevelSelector : MonoBehaviour {
     public Image container;
     public List<GroundDataSerializable> SelectedLevel;
 
-    private string[] files;
+    private List<string> files = new List<string>();
 
     private void Awake()
     {
@@ -34,15 +34,24 @@ public class LevelSelector : MonoBehaviour {
 
     private void Start()
     {
+        Debug.Log(Application.persistentDataPath);
+        string defaultLevels = Path.Combine(Application.streamingAssetsPath, "DefaultMaps");
         string path = Path.Combine(Application.persistentDataPath, "Maps");
+        LoadLevelsInPath(defaultLevels);
+        LoadLevelsInPath(path);
+    }
+
+    private void LoadLevelsInPath(string path)
+    {
         if (Directory.Exists(path))
         {
-            files = Directory.GetFiles(path);
-            for (int i = 0; i < files.Length; i++)
+            int initial = files.Count;
+            files.AddRange(Directory.GetFiles(path, "*.map"));
+            for (int i = initial; i < files.Count; i++)
             {
                 FileInfo f = new FileInfo(files[i]);
                 GameObject instance = Instantiate(levelPrefab, container.transform);
-                instance.GetComponentInChildren<Text>().text = f.Name;
+                instance.GetComponentInChildren<Text>().text = f.Name.Substring(0, f.Name.LastIndexOf("."));
                 int tempI = i;
                 instance.GetComponent<Button>().onClick.AddListener(() => LevelSelected(tempI));
             }

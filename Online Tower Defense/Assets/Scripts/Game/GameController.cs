@@ -72,7 +72,7 @@ public class GameController : MonoBehaviour {
         OnPlayChange += (bool value, bool hasMoreWaves) =>
         {
             if (!hasMoreWaves)
-                SceneManager.LoadScene(0);
+                EndGame(true);
         };
 
         ModifyLives(0);
@@ -82,10 +82,17 @@ public class GameController : MonoBehaviour {
     {
         Lives += value;
         if (Lives == 0)
-            SceneManager.LoadScene(0);
+            EndGame(false);
         LivesText.GetComponent<Text>().text = "Lives: " + Lives;
         LivesText.GetComponent<Animator>().ResetTrigger("PlayModified");
         LivesText.GetComponent<Animator>().SetTrigger("PlayModified");
+    }
+
+    private void EndGame(bool win)
+    {
+        PlayerPrefs.SetInt("EndScreen", 1);
+        PlayerPrefs.SetInt("Win", win ? 1 : 0);
+        SceneManager.LoadScene(0);
     }
 
     public void ModifyActionsLeft(int value)

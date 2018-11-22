@@ -24,7 +24,8 @@ public class Spawner : MonoBehaviour {
             GameObject instance = Instantiate(Prefab, pos, Quaternion.identity, null);
             GameController.Instance.AddEnemy(instance);
             i++;
-            yield return new WaitForSeconds(timeoutSeconds);
+            if (i != count)
+                yield return new WaitForSeconds(timeoutSeconds);
         }
         if (OnAllSpawned != null)
             OnAllSpawned();

@@ -169,7 +169,7 @@ public class TurretController : MonoBehaviour {
         {
             if (target == null ||
                 (
-                target != null &&
+                target != null && t != null &&
                 target.GetComponentInChildren<HealthController>().CurrentHealth >
                 t.GetComponentInChildren<HealthController>().CurrentHealth
                 ))

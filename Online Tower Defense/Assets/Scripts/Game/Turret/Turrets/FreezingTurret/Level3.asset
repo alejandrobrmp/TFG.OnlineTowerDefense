@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f89fbccce71f7b44839ba68d9140828, type: 3}
   m_Name: Level3
   m_EditorClassIdentifier: 
-  Level: 1
+  Level: 3
   Cooldown: 1
-  SlowingRatio: 50
+  SlowingRatio: 20
